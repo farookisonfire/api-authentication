@@ -5,6 +5,7 @@ const { ExtractJwt } = require('passport-jwt');
 const { JWT_SECRET } = require('./configuration');
 const User = require('./models/user');
 
+// JSON WEB TOKENS STRATEGY
 passport.use(new JWTStrategy({
   jwtFromRequest: ExtractJwt.fromHeader('authorization'),
   secretOrKey: JWT_SECRET 
@@ -23,4 +24,23 @@ passport.use(new JWTStrategy({
   } catch(error) {
     done(error, false);
   }
+}));
+
+// LOCAL STRATEGY
+passport.use(new LocalStrategy({
+  usernameField: 'email',
+}, async (email, password, done) => {
+  // Find the user given the email
+  const user = await User.findOne({email});
+
+  // If not, handle it
+  if (!user) {
+    return done(null, false);
+  }
+
+  // Check if the password is correct
+
+  // If not, handle it
+
+  // Otherwise, return the user
 }));
